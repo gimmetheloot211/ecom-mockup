@@ -1,0 +1,82 @@
+.orders-admin {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem; // Slightly reduced gap between orders
+
+  li {
+    background: #f9f9f9; // Light background for each order
+    border: 1px solid #ddd; // Subtle border for separation
+    border-radius: 6px; // Slightly smaller border-radius
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1rem; // Reduced padding for compact size
+
+    &:hover {
+      transform: translateY(-1px); // Subtle hover effect
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); // Slightly smaller shadow
+    }
+
+    .order-info {
+      flex: 1; // Take up available space
+      display: flex;
+      flex-direction: column;
+
+      a {
+        text-decoration: none;
+        color: inherit;
+        font-weight: 600; // Semi-bold for emphasis
+        margin-bottom: 0.3rem; // Smaller margin for compactness
+
+        &:hover {
+          text-decoration: underline; // Highlight on hover
+        }
+      }
+
+      .order-details {
+        display: flex;
+        flex-direction: column;
+
+        p {
+          margin: 0;
+          font-size: 0.9rem; // Smaller font size
+          color: #333;
+
+          &:first-child {
+            font-weight: bold; // Highlight important information
+          }
+
+          &:last-child {
+            font-size: 0.8rem; // Slightly smaller date font
+            color: #777; // Muted color for date
+            margin-top: 0.2rem; // Slight margin for spacing
+          }
+        }
+      }
+    }
+
+    .delete-button {
+      background: none;
+      border: none;
+      color: #d9534f; // Red for delete
+      cursor: pointer;
+      font-size: 1rem; // Slightly smaller button size
+      padding: 0.3rem; // Compact padding
+      border-radius: 4px;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #f2dede; // Subtle background on hover
+      }
+
+      &:focus {
+        outline: 2px solid #d9534f; // Accessible focus style
+      }
+    }
+  }
+}

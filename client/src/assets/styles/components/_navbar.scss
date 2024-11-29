@@ -1,0 +1,144 @@
+@use "../base/variables" as *;
+@use "../base/fonts" as *;
+
+.navbar {
+  background-color: #fff;
+  color: $text-color;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  .navbar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 2px solid $mid-gray-color;
+
+    .navbar-brand {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #000000;
+      text-decoration: none;
+
+      &:hover {
+        color: $mid-gray-color;
+      }
+    }
+
+    .navbar-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+
+      .user-icon {
+        font-size: 2rem;
+        color: $text-color;
+
+        &:hover {
+          color: $mid-gray-color;
+        }
+      }
+
+      .cart-user-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .cart-price {
+          font-size: 1rem;
+          color: $text-color;
+          font-weight: 600;
+
+          &:hover {
+            cursor: default;
+          }
+        }
+
+        .cart-icon {
+          font-size: 2rem;
+          color: $text-color;
+          margin-right: 30px;
+
+          &:hover {
+            color: $mid-gray-color;
+          }
+        }
+      }
+    }
+  }
+
+  .navbar-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    background-color: #fff;
+    padding: 0.5rem 2rem;
+
+    .auth-links {
+      display: flex;
+      gap: 2rem;
+      margin-left: auto;
+
+      a {
+        color: $text-color;
+        text-decoration: none;
+        font-size: 1rem;
+
+        &:hover {
+          color: $mid-gray-color;
+        }
+      }
+    }
+
+    .logout {
+      margin-left: auto;
+
+      button {
+        background-color: transparent;
+        border: none;
+        color: $text-color;
+        font-size: 1rem;
+        cursor: pointer;
+        font-weight: 500;
+        font-family: "Poppins", sans-serif, "Arial";
+
+        &:hover {
+          color: $mid-gray-color;
+        }
+      }
+    }
+
+    a {
+      color: $text-color;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+
+      &:hover {
+        color: $mid-gray-color;
+        border-color: $mid-gray-color;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .navbar-bottom {
+      flex-direction: column;
+      background-color: #fff;
+      width: 100%;
+      padding: 1rem;
+      gap: 1.5rem;
+      text-align: center;
+
+      .logout {
+        margin-left: 0;
+      }
+    }
+  }
+}

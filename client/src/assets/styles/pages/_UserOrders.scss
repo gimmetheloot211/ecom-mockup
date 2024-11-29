@@ -1,0 +1,91 @@
+@use "../base/variables" as *;
+
+.user-orders {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+
+  .loading,
+  .no-orders,
+  .error {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #444;
+  }
+
+  .error {
+    color: #d9534f;
+    font-weight: bold;
+  }
+
+  .orders-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .order-item {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      transition: box-shadow 0.3s ease;
+
+      &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .order-id {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #333;
+      }
+
+      .order-status {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        color: #6c757d;
+      }
+
+      .order-total {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .order-date {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 1rem;
+      }
+
+      .order-items {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        .order-item-detail {
+          border-top: 1px solid #eee;
+          padding: 0.5rem 0;
+
+          &:first-child {
+            border-top: none;
+          }
+
+          .item-name {
+            font-weight: bold;
+            color: #333;
+            text-transform: capitalize;
+          }
+
+          .item-quantity,
+          .item-price {
+            font-size: 0.9rem;
+            color: #666;
+          }
+        }
+      }
+    }
+  }
+}

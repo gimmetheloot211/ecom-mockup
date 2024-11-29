@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "useUnknownInCatchVariables": false,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true
+  },
+  "include": ["src/**/*", "./@types"]
+}

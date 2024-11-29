@@ -1,0 +1,30 @@
+@use "../../base/variables" as *;
+
+.admin-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0px;
+  button {
+    text-decoration: none;
+    color: black;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 30px;
+    font-weight: bold;
+  }
+}
+
+.management-buttons {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-evenly;
+
+  button {
+    font-size: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+}

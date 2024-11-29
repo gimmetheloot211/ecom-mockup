@@ -1,0 +1,95 @@
+@use "../../base/variables" as *;
+
+.product-edit {
+  display: flex;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    border: 2px solid #000000;
+    margin-right: 20px;
+    object-fit: cover;
+  }
+
+  .details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0 20px;
+
+    label {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: $dark-gray;
+    }
+
+    input {
+      font-size: 18px;
+      padding: 8px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: #f9f9f9;
+      transition: border 0.3s ease;
+
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+      }
+    }
+
+    .edit-save-btns {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      margin-top: 30px;
+
+      button {
+        padding: 12px 25px;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: background-color 0.2s, border 0.2s;
+
+        &:hover {
+          background-color: #303030;
+          color: #fff;
+        }
+
+        &.save-btn {
+          background-color: #000;
+          color: white;
+          border-color: #1f1f1f;
+
+          &:hover {
+            background-color: #1f1f1f;
+          }
+        }
+
+        &.edit-btn {
+          background-color: #000;
+          color: white;
+          border-color: #1f1f1f;
+
+          &:hover {
+            background-color: #1f1f1f;
+          }
+        }
+      }
+    }
+  }
+}
