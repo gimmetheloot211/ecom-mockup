@@ -7,9 +7,9 @@ import orderRoutes from "./routes/orderRoutes";
 
 dotenv.config();
 
-const requiredEnvVars = ["MONGO_URI"];
+const requiredEnvVars: string[] = ["MONGO_URI"];
 
-const missingEnvVars = requiredEnvVars.filter(
+const missingEnvVars: string[] = requiredEnvVars.filter(
   (varName) => !process.env[varName]
 );
 

@@ -6,9 +6,9 @@ import productRoutes from "./routes/productRoutes";
 
 dotenv.config();
 
-const requiredEnvVars = ["MONGO_URI"];
+const requiredEnvVars: string[] = ["MONGO_URI"];
 
-const missingEnvVars = requiredEnvVars.filter(
+const missingEnvVars: string[] = requiredEnvVars.filter(
   (varName) => !process.env[varName]
 );
 

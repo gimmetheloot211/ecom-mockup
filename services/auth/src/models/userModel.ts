@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema<IUser, IUserModel>(
       type: String,
     },
     address: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "UserAddress",
     },
     admin: { type: Boolean, default: false },

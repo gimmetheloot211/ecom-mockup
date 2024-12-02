@@ -7,9 +7,9 @@ import orderRoutes from "./routes/orderRoutes";
 
 dotenv.config();
 
-const requiredEnvVars = ["SECRET"];
+const requiredEnvVars: string[] = ["SECRET"];
 
-const missingEnvVars = requiredEnvVars.filter(
+const missingEnvVars: string[] = requiredEnvVars.filter(
   (varName) => !process.env[varName]
 );
 

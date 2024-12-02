@@ -2,13 +2,43 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import User from "../models/userModel";
-import UserAddress from "../models/userAddressModel";
+import UserAddress, { IUserAddress } from "../models/userAddressModel";
 
-const createToken = (_id: mongoose.Types.ObjectId, admin: boolean) => {
+interface SignupRequestBody {
+  username: string;
+  password: string;
+}
+
+interface LoginRequestBody {
+  username: string;
+  password: string;
+}
+
+interface UserDetailsResponse {
+  username: string;
+  firstName: string;
+  lastName: string;
+  address: mongoose.Types.ObjectId | IUserAddress | null;
+  admin: boolean;
+}
+
+interface UserUpdateRequestBody {
+  firstName?: string;
+  lastName?: string;
+  street?: string;
+  city?: string;
+  province?: string;
+  zipCode?: number;
+}
+
+const createToken = (_id: mongoose.Types.ObjectId, admin: boolean): string => {
   return jwt.sign({ _id, admin }, process.env.SECRET!, { expiresIn: "12h" });
 };
 
-const userSignup = async (req: Request, res: Response): Promise<void> => {
+const userSignup = async (
+  req: Request<{}, {}, SignupRequestBody>,
+  res: Response
+): Promise<void> => {
   const { username, password } = req.body;
 
   try {
@@ -24,7 +54,10 @@ const userSignup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const userLogin = async (req: Request, res: Response): Promise<void> => {
+const userLogin = async (
+  req: Request<{}, {}, LoginRequestBody>,
+  res: Response
+): Promise<void> => {
   const { username, password } = req.body;
 
   try {
@@ -38,18 +71,23 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
 };
 
 const userGetDetails = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+  const userID = req.user?._id;
 
   try {
     const user = await User.findById({ _id: userID }).populate("address");
 
-    const userDetails = {
-      username: user?.username,
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      address: user?.address || "",
-      admin: user?.admin,
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+    }
+
+    const userDetails: UserDetailsResponse = {
+      username: user!.username,
+      firstName: user!.firstName || "",
+      lastName: user!.lastName || "",
+      address: user!.address || null,
+      admin: user!.admin,
     };
+
     res.status(200).json(userDetails);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -57,10 +95,10 @@ const userGetDetails = async (req: Request, res: Response): Promise<void> => {
 };
 
 const userUpdateDetails = async (
-  req: Request,
+  req: Request<{}, {}, UserUpdateRequestBody>,
   res: Response
 ): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+  const userID = req.user?._id;
   const { firstName, lastName, street, city, province, zipCode } = req.body;
 
   try {
@@ -87,7 +125,8 @@ const userUpdateDetails = async (
     } else {
       user = await User.findById(userID)
         .populate("address")
-        .select("-password");
+        .select("-password")
+        .select("-admin");
     }
 
     res.status(200).json(user);

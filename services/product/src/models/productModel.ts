@@ -8,8 +8,6 @@ interface IProduct extends mongoose.Document {
   stock: number;
   category: string;
   imageUrls?: string[];
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const productSchema = new mongoose.Schema<IProduct>(

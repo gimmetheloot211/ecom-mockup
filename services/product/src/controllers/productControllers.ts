@@ -1,6 +1,14 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import { Request, Response } from "express";
 import Product from "../models/productModel";
+
+interface ProductCreateBody {
+  name: string;
+  description: string; 
+  price: number; 
+  stock: number; 
+  category: "Electronics" | "Clothing" | "Home" | "Books" | "Sports" | "Fruits";
+}
 
 const productGet = async (req: Request, res: Response): Promise<void> => {
   const productID = req.params.id;
@@ -32,7 +40,7 @@ const productGetAll = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const productCreate = async (req: Request, res: Response): Promise<void> => {
+const productCreate = async (req: Request<{}, {}, ProductCreateBody>, res: Response): Promise<void> => {
   const { name, description, price, stock, category } = req.body;
 
   if (!name || !description || !price || !stock || !category) {

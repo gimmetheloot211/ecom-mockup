@@ -1,17 +1,16 @@
 import mongoose from "mongoose";
 
 interface IOrder extends mongoose.Document {
-  user: mongoose.Schema.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
   items: {
-    product: mongoose.Schema.Types.ObjectId;
+    product: mongoose.Types.ObjectId;
     productName: string;
     quantity: number;
     priceTotal: number;
   }[];
   totalAmount: number;
   status: "pending" | "confirmed" | "shipped" | "delivered" | "canceled";
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const orderSchema = new mongoose.Schema<IOrder>(
@@ -30,7 +29,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
         },
         productName: { type: String, required: true },
         quantity: { type: Number, required: true, min: 1 },
-        priceTotal: { type: Number, required: true },
+        priceTotal: { type: Number, required: true, min: 0 },
       },
     ],
     totalAmount: {

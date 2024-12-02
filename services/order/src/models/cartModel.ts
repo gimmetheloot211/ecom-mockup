@@ -1,17 +1,16 @@
 import mongoose from "mongoose";
 
 interface ICart extends mongoose.Document {
+  _id: mongoose.Types.ObjectId;
   user: mongoose.Schema.Types.ObjectId;
   items: {
-    product: mongoose.Schema.Types.ObjectId;
+    product: mongoose.Types.ObjectId;
     productName: string;
     quantity: number;
     priceTotal: number;
     stock: number;
   }[];
   cartPriceTotal: number;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const cartSchema = new mongoose.Schema<ICart>(
@@ -31,12 +30,13 @@ const cartSchema = new mongoose.Schema<ICart>(
         },
         productName: { type: String, required: true },
         quantity: { type: Number, required: true, min: 1 },
-        priceTotal: { type: Number, required: true },
-        stock: { type: Number, required: true},
+        priceTotal: { type: Number, required: true, min: 0 },
+        stock: { type: Number, required: true, min: 0 },
       },
     ],
     cartPriceTotal: {
       type: Number,
+      required: true,
     },
   },
   { timestamps: true }

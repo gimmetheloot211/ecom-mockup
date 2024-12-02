@@ -6,9 +6,9 @@ import userRoutes from "./routes/userRoutes";
 
 dotenv.config();
 
-const requiredEnvVars = ["MONGO_URI", "SECRET"];
+const requiredEnvVars: string[] = ["MONGO_URI", "SECRET"];
 
-const missingEnvVars = requiredEnvVars.filter(
+const missingEnvVars: string[] = requiredEnvVars.filter(
   (varName) => !process.env[varName]
 );
 

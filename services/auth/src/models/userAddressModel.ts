@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface IUserAddress extends mongoose.Document {
+  _id: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId;
   province: string;
   city: string;

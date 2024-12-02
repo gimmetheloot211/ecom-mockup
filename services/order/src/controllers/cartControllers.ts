@@ -1,14 +1,23 @@
 import mongoose from "mongoose";
 import axios from "axios";
-import dotenv from "dotenv";
 import { Request, Response } from "express";
 
 import Cart from "../models/cartModel";
 
-dotenv.config();
+interface UpdateCartBody {
+  productID: mongoose.Types.ObjectId;
+  quantity: number;
+}
 
-const updateCartItem = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+interface RemoveCartItemBody {
+  productID: mongoose.Types.ObjectId;
+}
+
+const updateCartItem = async (
+  req: Request<{}, {}, UpdateCartBody>,
+  res: Response
+): Promise<void> => {
+  const userID = req.user?._id;
   const { productID, quantity } = req.body;
 
   const nQuantity = Number(quantity);
@@ -104,7 +113,7 @@ const updateCartItem = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getCart = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+  const userID = req.user?._id;
 
   try {
     const cart = await Cart.findOne({ user: userID });
@@ -123,7 +132,7 @@ const getCart = async (req: Request, res: Response): Promise<void> => {
 };
 
 const clearCart = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+  const userID = req.user?._id;
 
   try {
     const cart = await Cart.findOne({ user: userID });
@@ -148,8 +157,11 @@ const clearCart = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const removeCartItem = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+const removeCartItem = async (
+  req: Request<{}, {}, RemoveCartItemBody>,
+  res: Response
+): Promise<void> => {
+  const userID = req.user?._id;
   const { productID } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(productID)) {

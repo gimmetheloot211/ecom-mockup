@@ -4,8 +4,18 @@ import { Request, Response } from "express";
 import Cart from "../models/cartModel";
 import Order from "../models/orderModel";
 
-const createOrder = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+interface CreateOrderBody {
+  cartID: mongoose.Types.ObjectId;
+}
+
+interface UpdateOrderStatusBody {
+  status: "pending" | "confirmed" | "shipped" | "delivered" | "canceled";
+}
+const createOrder = async (
+  req: Request<{}, {}, CreateOrderBody>,
+  res: Response
+): Promise<void> => {
+  const userID = req.user?._id;
   const { cartID } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(cartID)) {
@@ -40,7 +50,7 @@ const createOrder = async (req: Request, res: Response): Promise<void> => {
 };
 
 const cancelOrder = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+  const userID = req.user?._id;
   const orderID = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(orderID)) {
@@ -74,7 +84,7 @@ const cancelOrder = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getOrder = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+  const userID = req.user?._id;
   const orderID = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(orderID)) {
@@ -96,7 +106,7 @@ const getOrder = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getUserOrders = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.headers["x-user-id"];
+  const userID = req.user?._id;
 
   try {
     const orders = await Order.find({ user: userID }).sort({ createdAt: -1 });
@@ -141,7 +151,7 @@ const getOrderAdmin = async (req: Request, res: Response): Promise<void> => {
 };
 
 const updateOrderStatus = async (
-  req: Request,
+  req: Request<{ id: string }, {}, UpdateOrderStatusBody>,
   res: Response
 ): Promise<void> => {
   const orderID = req.params.id;
@@ -195,7 +205,7 @@ const deleteOrder = async (req: Request, res: Response): Promise<void> => {
 
     if (!order) {
       res.status(404).json({ error: "Order not found" });
-      return
+      return;
     }
 
     res.status(200).json({ message: "Order deleted successfully" });

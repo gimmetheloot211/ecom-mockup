@@ -39,7 +39,7 @@ const createAdminUser = async () => {
       user: adminUser._id,
     });
     
-    adminUser.address = userAddress._id as mongoose.Types.ObjectId;
+    adminUser.address = userAddress._id;
 
     await adminUser.save();
 
