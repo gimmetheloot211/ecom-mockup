@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-interface CartItem {
+export interface ICartItem {
   product: string;
   productName: string;
   quantity: number;
@@ -9,14 +9,14 @@ interface CartItem {
   stock: number;
 }
 
-interface Cart {
+export interface ICart {
   _id: string;
-  items: CartItem[];
+  items: ICartItem[];
   cartPriceTotal: number;
 }
 
 interface CartContextProps {
-  cart: Cart | null;
+  cart: ICart | null;
   isLoading: boolean;
   error: string;
   fetchCart: () => Promise<void>;
@@ -31,7 +31,7 @@ export const CartContext = createContext<CartContextProps | undefined>(
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuthContext();
-  const [cart, setCart] = useState<Cart | null>(null);
+  const [cart, setCart] = useState<ICart | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 

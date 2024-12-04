@@ -1,14 +1,34 @@
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+
+interface UserAddress {
+  _id: string; // Mongoose ID
+  user: string; // Mongoose ID
+  province: string;
+  city: string;
+  street: string;
+  zipCode: number;
+}
+
+interface IUser {
+  _id: string; // Mongoose ID
+  username: string;
+  admin: boolean;
+  firstName?: string;
+  lastName?: string;
+  address?: UserAddress;
+}
 
 const UserDetails = () => {
   const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [userDetails, setUserDetails] = useState<any>(null);
+  const [userDetails, setUserDetails] = useState<IUser | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [updatedDetails, setUpdatedDetails] = useState<any>(null);
+  const [updatedDetails, setUpdatedDetails] = useState<Partial<IUser> | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -24,7 +44,6 @@ const UserDetails = () => {
         if (response.ok) {
           setUserDetails(json);
           setUpdatedDetails(json);
-          console.log(json);
         } else {
           setError(json.error);
         }
@@ -85,7 +104,7 @@ const UserDetails = () => {
                 <input
                   type="text"
                   name="firstName"
-                  defaultValue={updatedDetails.firstName || ""}
+                  defaultValue={updatedDetails?.firstName || ""}
                   onChange={handleInputChange}
                 />
               ) : (
@@ -97,7 +116,7 @@ const UserDetails = () => {
                 <input
                   type="text"
                   name="lastName"
-                  defaultValue={updatedDetails.lastName || ""}
+                  defaultValue={updatedDetails?.lastName || ""}
                   onChange={handleInputChange}
                 />
               ) : (
@@ -111,7 +130,7 @@ const UserDetails = () => {
                 <input
                   type="text"
                   name="street"
-                  defaultValue={updatedDetails.address?.street || ""}
+                  defaultValue={updatedDetails?.address?.street || ""}
                   onChange={handleInputChange}
                 />
               ) : (
@@ -123,7 +142,7 @@ const UserDetails = () => {
                 <input
                   type="text"
                   name="city"
-                  defaultValue={updatedDetails.address?.city || ""}
+                  defaultValue={updatedDetails?.address?.city || ""}
                   onChange={handleInputChange}
                 />
               ) : (
@@ -135,7 +154,7 @@ const UserDetails = () => {
                 <input
                   type="text"
                   name="province"
-                  defaultValue={updatedDetails.address?.province || ""}
+                  defaultValue={updatedDetails?.address?.province || ""}
                   onChange={handleInputChange}
                 />
               ) : (
@@ -147,7 +166,7 @@ const UserDetails = () => {
                 <input
                   type="text"
                   name="zipCode"
-                  defaultValue={updatedDetails.address?.zipCode || ""}
+                  defaultValue={updatedDetails?.address?.zipCode || ""}
                   onChange={handleInputChange}
                 />
               ) : (
@@ -168,7 +187,7 @@ const UserDetails = () => {
         )}
       </div>
       <div className="order-history">
-          <Link to="/user/orders">Order history</Link>
+        <Link to="/user/orders">Order history</Link>
       </div>
     </div>
   );

@@ -5,9 +5,24 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
+interface IOrder {
+  _id: string; // Mongoose ID
+  user: string; // Mongoose ID
+  items: {
+    product: string; // Mongoose ID
+    productName: string;
+    quantity: number;
+    priceTotal: number;
+  }[];
+  totalAmount: number;
+  status: "pending" | "confirmed" | "shipped" | "delivered" | "canceled";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const OrderManagement = () => {
   const { user } = useAuthContext();
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<IOrder[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -15,21 +30,22 @@ const OrderManagement = () => {
     const fetchOrders = async () => {
       try {
         setIsLoading(true);
+        setError("");
+
         const response = await fetch("http://localhost:8000/order/admin/all", {
           headers: { Authorization: `Bearer ${user?.token}` },
         });
 
         const json = await response.json();
         if (response.ok) {
-          setIsLoading(false);
           setOrders(json);
         } else {
-          setIsLoading(false);
           setError(json.error);
         }
       } catch (error) {
-        setIsLoading(false);
         setError("Failed to fetch order data");
+      } finally {
+        setIsLoading(false);
       }
     };
     if (user) {
@@ -41,6 +57,8 @@ const OrderManagement = () => {
     if (!orderID) return;
 
     try {
+      setError("");
+
       const response = await fetch(
         `http://localhost:8000/order/admin/id/${orderID}`,
         {

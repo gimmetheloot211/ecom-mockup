@@ -11,17 +11,12 @@ import { useCartContext } from "../hooks/useCartContext";
 import { useLogout } from "../hooks/useLogout";
 
 const Navbar: React.FC = () => {
-  const [isActive, setIsActive] = useState(false);
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const { cart } = useCartContext();
 
-  const handleToggle = () => {
-    setIsActive(!isActive);
-  };
-
   return (
-    <nav className={`navbar ${isActive ? "active" : ""}`}>
+    <nav className="navbar">
       {/* Top Section */}
       <div className="navbar-top">
         <Link to="/" className="navbar-brand">
@@ -45,7 +40,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className={`navbar-bottom ${isActive ? "show" : ""}`}>
+      <div className="navbar-bottom">
         <Link to="/">Home</Link>
         <Link to="/products">Products</Link>
         <Link to="/about">About</Link>

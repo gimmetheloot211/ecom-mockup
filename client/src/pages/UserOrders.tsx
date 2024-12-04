@@ -2,26 +2,31 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 
-interface OrderItem {
-  product: string;
-  productName: string;
-  quantity: number;
-  priceTotal: number;
-}
+type OrderStatus =
+  | "pending"
+  | "shipped"
+  | "confirmed"
+  | "delivered"
+  | "canceled";
 
-interface Order {
-  _id: string;
-  user: string;
-  items: OrderItem[];
+interface IOrder {
+  _id: string; // Mongoose ID
+  user: string; // Mongoose ID
+  items: {
+    product: string; // Mongoose ID
+    productName: string;
+    quantity: number;
+    priceTotal: number;
+  }[];
   totalAmount: number;
-  status: "pending" | "confirmed" | "shipped" | "delivered" | "canceled";
+  status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const UserOrders = () => {
   const { user } = useAuthContext();
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<IOrder[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -29,6 +34,8 @@ const UserOrders = () => {
     const fetchOrders = async () => {
       try {
         setIsLoading(true);
+        setError("");
+        
         const response = await fetch("http://localhost:8000/order/", {
           headers: { Authorization: `Bearer ${user?.token}` },
         });

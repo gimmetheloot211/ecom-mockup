@@ -2,27 +2,64 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
-interface OrderItem {
-  productName: string;
-  quantity: number;
-  priceTotal: number;
+type OrderStatus =
+  | "pending"
+  | "shipped"
+  | "confirmed"
+  | "delivered"
+  | "canceled";
+
+interface IOrder {
+  _id: string; // Mongoose ID
+  user: string; // Mongoose ID
+  items: {
+    product: string; // Mongoose ID
+    productName: string;
+    quantity: number;
+    priceTotal: number;
+  }[];
+  totalAmount: number;
+  status: OrderStatus;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface CustomerAddress {
+  _id: string; // Mongoose ID
+  user: string; // Mongoose ID
+  province: string;
+  city: string;
+  street: string;
+  zipCode: number;
+}
+
+interface ICustomer {
+  _id: string; // Mongoose ID
+  username: string;
+  admin: boolean;
+  firstName?: string;
+  lastName?: string;
+  address?: CustomerAddress;
 }
 
 const OrderDetails = () => {
   const { user } = useAuthContext();
   const { orderID } = useParams<{ orderID: string }>();
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<IOrder | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [customerDetails, setCustomerDetails] = useState<any>(null);
+  const [customerDetails, setCustomerDetails] = useState<ICustomer | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
       if (!orderID || !user) return;
 
-      setIsLoading(true);
-
       try {
+        setError("");
+        setIsLoading(true);
+
         const response = await fetch(
           `http://localhost:8000/order/admin/id/${orderID}`,
           {
@@ -34,14 +71,13 @@ const OrderDetails = () => {
 
         if (response.ok) {
           setOrder(json);
-          console.log(order);
         } else {
-          setIsLoading(false);
           setError(json.error);
         }
       } catch (error) {
-        setIsLoading(false);
         setError("Failed to fetch order details");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -64,7 +100,6 @@ const OrderDetails = () => {
 
         if (response.ok) {
           setCustomerDetails(json);
-          console.log(customerDetails);
         } else {
           setError(json.error);
         }
@@ -81,11 +116,11 @@ const OrderDetails = () => {
   if (error) return <p className="error">{error}</p>;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     if (!orderID || !user) return;
 
-    const status = (e.target as HTMLFormElement).status.value;
+    const status = (e.target as HTMLFormElement).status.value as OrderStatus;
 
     try {
       const response = await fetch(
@@ -103,7 +138,9 @@ const OrderDetails = () => {
       const json = await response.json();
 
       if (response.ok) {
-        setOrder({ ...order, status });
+        if (order) {
+          setOrder({ ...order, status });
+        }
         alert("Order status updated successfully!");
       } else {
         setError(json.error);
@@ -126,7 +163,7 @@ const OrderDetails = () => {
           </p>
           <h4>Items in Order:</h4>
           <ul>
-            {order.items.map((item: OrderItem) => (
+            {order.items.map((item) => (
               <li key={item.productName}>
                 {item.productName} - {item.quantity} - ${item.priceTotal}$
               </li>
@@ -134,16 +171,17 @@ const OrderDetails = () => {
           </ul>
           <h4>User Information:</h4>
           <p>
-            <strong>Username:</strong> {customerDetails.username}
+            <strong>Username:</strong> {customerDetails?.username}
           </p>
           <p>
             <strong>Address:</strong>
             <br />
-            {customerDetails.address.street}
+            {customerDetails?.address?.street}
             <br />
-            {customerDetails.address.city}, {customerDetails.address.province}
+            {customerDetails?.address?.city},{" "}
+            {customerDetails?.address?.province}
             <br />
-            {customerDetails.address.zipCode}
+            {customerDetails?.address?.zipCode}
           </p>
 
           <form onSubmit={handleSubmit}>

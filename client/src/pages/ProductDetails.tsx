@@ -3,11 +3,23 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useCartContext } from "../hooks/useCartContext";
 
+interface IProduct {
+  _id: string; // Mongoose ID
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: string;
+  imageUrls?: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const ProductDetails = () => {
   const { productID } = useParams<{ productID: string }>();
   const { user } = useAuthContext();
   const { cart, updateCartItem } = useCartContext();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<IProduct | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(0);
@@ -16,6 +28,8 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       setIsLoading(true);
+      setError("");
+      
       try {
         const response = await fetch(`http://localhost:8000/product/id/${productID}`, {
           headers: {
@@ -41,6 +55,10 @@ const ProductDetails = () => {
     }
   }, [productID, user?.token]);
 
+  if (isLoading) return <p>Loading...</p>;
+  
+  if (!product) return <p>No product details found.</p>;
+
   const handleQuantityChange = (change: number) => {
     const cartItem = cart?.items.find((item) => item.product === product._id);
     const cartItemQuantity = cartItem?.quantity || 0;
@@ -61,6 +79,9 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = async () => {
+    setError("");
+
+    
     const cartItem = cart?.items.find((item) => item.product === product._id);
     const cartItemQuantity = cartItem?.quantity || 0;
     if (cartItemQuantity + quantity > product.stock) {
@@ -79,10 +100,6 @@ const ProductDetails = () => {
     }
     setError("");
   };
-
-  if (isLoading) return <p>Loading...</p>;
-
-  if (!product) return <p>No product details found.</p>;
 
   return (
     <div className="product-details">

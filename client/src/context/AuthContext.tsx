@@ -6,17 +6,17 @@ import {
   ReactNode,
 } from "react";
 
-interface User {
+export interface IUser {
   username: string;
   token: string;
   admin: boolean;
 }
 
 interface AuthState {
-  user: User | null;
+  user: IUser | null;
 }
 
-type AuthAction = { type: "LOGIN"; payload: User } | { type: "LOGOUT" };
+type AuthAction = { type: "LOGIN"; payload: IUser } | { type: "LOGOUT" };
 
 interface AuthContextType extends AuthState {
   dispatch: React.Dispatch<AuthAction>;
@@ -48,7 +48,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    const user: User | null = storedUser ? JSON.parse(storedUser) : null;
+    const user: IUser | null = storedUser ? JSON.parse(storedUser) : null;
 
     if (user) {
       dispatch({ type: "LOGIN", payload: user });

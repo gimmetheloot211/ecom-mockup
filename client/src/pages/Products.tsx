@@ -2,9 +2,21 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { Link } from "react-router-dom";
 
+interface IProduct {
+  _id: string; // Mongoose ID
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: string;
+  imageUrls?: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const ProductManagement = () => {
   const { user } = useAuthContext();
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -12,6 +24,8 @@ const ProductManagement = () => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
+        setError("");
+
         const response = await fetch("http://localhost:8000/product/all");
 
         const json = await response.json();
@@ -29,19 +43,24 @@ const ProductManagement = () => {
 
     fetchProducts();
   }, []);
+
+  if (isLoading) return <p>Loading products...</p>;
+
+  if (products.length === 0 && !isLoading) return <p>No products found.</p>;
+
   return (
     <div className="products">
       <ul>
         {products?.map((product) => (
-          <Link to={`/product/${product._id}`}>
-            <li key={product._id}>
+          <li key={product._id}>
+            <Link to={`/product/${product._id}`}>
               <img src={product.imageUrls?.[0]} alt={`${product.name}`} />
               <div className="details">
                 <p className="name">{product.name}</p>
                 <p className="price">${product.price}</p>
               </div>
-            </li>
-          </Link>
+            </Link>
+          </li>
         ))}
       </ul>
 

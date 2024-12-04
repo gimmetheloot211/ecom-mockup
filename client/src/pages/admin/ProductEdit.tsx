@@ -2,10 +2,22 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
+interface IProduct {
+  _id: string; // Mongoose ID
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: string;
+  imageUrls?: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const ProductEdit = () => {
   const { productID } = useParams<{ productID: string }>();
   const { user } = useAuthContext();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<IProduct | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [stock, setStock] = useState<number>();
@@ -15,6 +27,8 @@ const ProductEdit = () => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       setIsLoading(true);
+      setError("");
+
       try {
         const response = await fetch(
           `http://localhost:8000/product/id/${productID}`,
@@ -59,7 +73,7 @@ const ProductEdit = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8000/product/update/${product._id}`,
+        `http://localhost:8000/product/update/${product?._id}`,
         {
           method: "PATCH",
           headers: {
