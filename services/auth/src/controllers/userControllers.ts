@@ -71,7 +71,7 @@ const userLogin = async (
 };
 
 const userGetDetails = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
 
   try {
     const user = await User.findById({ _id: userID }).populate("address");
@@ -98,7 +98,7 @@ const userUpdateDetails = async (
   req: Request<{}, {}, UserUpdateRequestBody>,
   res: Response
 ): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
   const { firstName, lastName, street, city, province, zipCode } = req.body;
 
   try {

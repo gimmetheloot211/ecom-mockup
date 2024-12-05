@@ -36,7 +36,6 @@ const cartSchema = new mongoose.Schema<ICart>(
     ],
     cartPriceTotal: {
       type: Number,
-      required: true,
     },
   },
   { timestamps: true }

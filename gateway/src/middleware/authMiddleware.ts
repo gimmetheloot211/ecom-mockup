@@ -18,7 +18,8 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const { _id, admin } = jwt.verify(token, process.env.SECRET!) as JwtPayload;
-    req.user = { _id, admin }
+    req.headers["x-user-id"] = _id;
+    req.headers["x-user-admin"] = admin.toString();
 
     next();
   } catch (error) {

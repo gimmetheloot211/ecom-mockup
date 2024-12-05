@@ -17,7 +17,7 @@ const updateCartItem = async (
   req: Request<{}, {}, UpdateCartBody>,
   res: Response
 ): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
   const { productID, quantity } = req.body;
 
   const nQuantity = Number(quantity);
@@ -113,7 +113,7 @@ const updateCartItem = async (
 };
 
 const getCart = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
 
   try {
     const cart = await Cart.findOne({ user: userID });
@@ -132,7 +132,7 @@ const getCart = async (req: Request, res: Response): Promise<void> => {
 };
 
 const clearCart = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
 
   try {
     const cart = await Cart.findOne({ user: userID });
@@ -161,7 +161,7 @@ const removeCartItem = async (
   req: Request<{}, {}, RemoveCartItemBody>,
   res: Response
 ): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
   const { productID } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(productID)) {

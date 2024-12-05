@@ -15,7 +15,7 @@ const createOrder = async (
   req: Request<{}, {}, CreateOrderBody>,
   res: Response
 ): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
   const { cartID } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(cartID)) {
@@ -50,7 +50,7 @@ const createOrder = async (
 };
 
 const cancelOrder = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
   const orderID = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(orderID)) {
@@ -84,7 +84,7 @@ const cancelOrder = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getOrder = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
   const orderID = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(orderID)) {
@@ -106,7 +106,7 @@ const getOrder = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getUserOrders = async (req: Request, res: Response): Promise<void> => {
-  const userID = req.user?._id;
+  const userID = req.headers["x-user-id"];
 
   try {
     const orders = await Order.find({ user: userID }).sort({ createdAt: -1 });
