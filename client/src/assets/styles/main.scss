@@ -1,16 +1,16 @@
 @use "./base/variables" as *;
 
-@use "./components/navbar" as *;
+@use "./components/Navbar" as *;
+@use "./components/admin/ProductManagement" as *;
+@use "./components/admin/OrderManagement" as *;
 
-@use "./components/admin/productmanagement" as *;
-@use "./pages/admin/admin" as *;
+@use "./pages/admin/Admin" as *;
 @use "./pages/admin/ProductEdit" as *;
 @use "./pages/admin/ProductAdd" as *;
-@use "./components/admin/OrderManagement" as *;
-@use "./pages/cart" as *;
-@use "./pages/products" as *;
+@use "./pages/Cart" as *;
+@use "./pages/Products" as *;
 @use "./pages/UserDetails" as *;
 @use "./pages/UserOrders" as *;
 @use "./pages/ProductDetails" as *;
-@use "./pages/login" as *;
-@use "./pages/signup" as *;
+@use "./pages/Login" as *;
+@use "./pages/Signup" as *;
