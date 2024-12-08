@@ -22,5 +22,5 @@ git clone https://github.com/gimmetheloot211/ecom-mockup.git
 docker-compose up --build
 ```
 4. Access the application
--**Frontend:** http://localhost:3000
--**Gateway API:** http://localhost:8000
+- **Frontend:** http://localhost:3000
+- **Gateway API:** http://localhost:8000
